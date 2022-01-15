@@ -1,0 +1,42 @@
+{
+	"name": "df_blob_EmployeeDetails",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_blob_employee",
+						"type": "DatasetReference"
+					},
+					"name": "sourceEmployee"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_blob_Departments",
+						"type": "DatasetReference"
+					},
+					"name": "sourceDepartments"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_blob_EmployeeDetails",
+						"type": "DatasetReference"
+					},
+					"name": "SinkEmployeeDetails"
+				}
+			],
+			"transformations": [
+				{
+					"name": "JoinEmployeeDepartments"
+				},
+				{
+					"name": "RemoveDuplicateColumns"
+				}
+			],
+			"script": "source(output(\n\t\tempid as string,\n\t\tname as string,\n\t\tcountry as string,\n\t\tdepartment as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tpartitionBy('hash', 1)) ~> sourceEmployee\nsource(output(\n\t\tdepid as string,\n\t\tdepname as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tpartitionBy('hash', 1)) ~> sourceDepartments\nsourceEmployee, sourceDepartments join(department == depid,\n\tjoinType:'inner',\n\tpartitionBy('hash', 1),\n\tbroadcast: 'auto')~> JoinEmployeeDepartments\nJoinEmployeeDepartments select(mapColumn(\n\t\t{Employee ID} = empid,\n\t\t{Employee Name} = name,\n\t\tCountry = country,\n\t\t{Department ID} = department,\n\t\t{Department Name} = depname\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> RemoveDuplicateColumns\nRemoveDuplicateColumns sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tinput(\n\t\tdepid as string,\n\t\tdepname as string\n\t),\n\tpartitionFileNames:['EmployeeDetails.csv'],\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tsaveOrder: 1,\n\tpartitionBy('hash', 1)) ~> SinkEmployeeDetails"
+		}
+	}
+}

@@ -1,0 +1,23 @@
+{
+	"name": "ds_Git_Ingest_cases_deaths_http",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_git_CovidCases_Deaths_Http",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "HttpServerLocation",
+				"relativeUrl": "/BajiD365/Covid/blob/main/cases_deaths.csv"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

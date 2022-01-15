@@ -1,0 +1,9 @@
+{
+	"name": "ADFCoronaReporting",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "e58ecf70-4061-4e68-8dd9-b50ee20cbda4",
+		"tenantId": "10ae4410-53eb-4362-9d80-b1563cbbb23d"
+	}
+}

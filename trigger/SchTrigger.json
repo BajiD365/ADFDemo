@@ -1,0 +1,27 @@
+{
+	"name": "SchTrigger",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2022-01-04T00:00:00Z",
+				"timeZone": "UTC",
+				"schedule": {
+					"minutes": [
+						30,
+						45
+					],
+					"hours": [
+						10,
+						14
+					]
+				}
+			}
+		}
+	}
+}
